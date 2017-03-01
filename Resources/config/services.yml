@@ -1,4 +1,14 @@
 services:
+  lch_user_manager:
+    class: Lch\UserBundle\Manager\UserManager
+    arguments: ['@doctrine.orm.entity_manager', '@security.encoder_factory']
+
+  lch_user_create_command:
+    class: Lch\UserBundle\Command\CreateUserCommand
+    arguments: ['@lch_user_manager']
+    tags:
+      - {name: console.command}
+
 #    lch_user.example:
 #        class: Lch\UserBundle\Example
 #        arguments: ["@service_id", "plain_value", "%parameter%"]

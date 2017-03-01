@@ -1,3 +1,14 @@
-lch_user_homepage:
-    path:     /
-    defaults: { _controller: LchUserBundle:Default:index }
+lch_user_login:
+  path:     /login
+  methods: ['GET']
+  defaults: { _controller: LchUserBundle:Default:login }
+
+lch_user_login_check:
+  path:     /login_check
+  methods: ['POST']
+  defaults: { _controller: LchUserBundle:Default:check }
+
+lch_user_login_logout:
+  path:     /logout
+  methods: ['GET']
+  defaults: { _controller: LchUserBundle:Default:logout }
