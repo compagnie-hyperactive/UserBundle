@@ -1,7 +1,14 @@
 services:
+  lch_token_generator:
+    class: Lch\UserBundle\Util\TokenGenerator
+
+  lch_password_updater:
+    class: Lch\UserBundle\Util\PasswordUpdater
+    arguments: ['@security.encoder_factory']
+
   lch_user_manager:
     class: Lch\UserBundle\Manager\UserManager
-    arguments: ['@doctrine.orm.entity_manager', '@security.encoder_factory']
+    arguments: ['@doctrine.orm.entity_manager', '@lch_password_updater']
 
   lch_user_create_command:
     class: Lch\UserBundle\Command\CreateUserCommand
