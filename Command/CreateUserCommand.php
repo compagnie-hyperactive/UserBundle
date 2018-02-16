@@ -24,6 +24,7 @@ class CreateUserCommand extends ContainerAwareCommand
      */
     private $userManager;
 
+    
     /**
      * CreateUserCommand constructor.
      * @param UserManager $userManager
