@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <h1>Document Manager</h1>
+
+    <div class="login-page">
+        <p>Un email de réinitialisation de mot de passe vous a été envoyé. Il est valable {{ tokenLifetime }} heures</p>
+    </div>
+{% endblock %}

@@ -1,280 +1,276 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: matthieu
+ * Date: 21/11/17
+ * Time: 19:18
+ */
 
 namespace Lch\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * User
- *
- * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass="Lch\UserBundle\Repository\UserRepository")
+ * @ORM\Entity
+ * @ORM\Table
+ * @UniqueEntity(fields="email", message="Email already taken")
+ * @UniqueEntity(fields="username", message="Username already taken")
  */
-class User implements UserInterface
-{
-    /**
-     * Plain password. Used for model validation. Must not be persisted.
-     *
-     * @var string
-     */
-    protected $plainPassword;
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="first_name", type="string", length=255)
-     */
-    private $firstName;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="last_name", type="string", length=255)
-     */
-    private $lastName;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="username", type="string", length=255, unique=true)
-     */
-    private $username;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, unique=true)
-     */
-    private $email;
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="roles", type="string", length=512)
-     */
-    private $roles;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=255)
-     */
-    private $password;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="salt", type="string", length=255)
-     */
-    private $salt;
+abstract class User implements AdvancedUserInterface, \Serializable {
+	/**
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
 
-    public function __construct() {
+	/**
+	 * @ORM\Column(type="string", length=25, unique=true)
+	 */
+	protected $username;
 
-        // Defulat user role addition
-        $this->roles = ['ROLE_USER'];
 
-        // Salt key for password generation
-        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-    }
+	/**
+	 * @ORM\Column(type="string", length=100, unique=true)
+	 * @Assert\NotBlank()
+	 * @Assert\Email()
+	 */
+	protected $email;
 
-    /**
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
+	/**
+	 * @Assert\NotBlank()
+	 * @Assert\Length(max=4096)
+	 */
+	private $plainPassword;
 
-    /**
-     * @param string $username
-     * @return User
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-        return $this;
-    }
+	/**
+	 * @ORM\Column(type="string", length=64)
+	 */
+	protected $password;
 
-    /**
-     * @return string
-     */
-    public function getPlainPassword()
-    {
-        return $this->plainPassword;
-    }
+	/**
+	 * @ORM\Column(name="is_active", type="boolean")
+	 */
+	protected $isActive;
 
-    /**
-     * @param string $plainPassword
-     * @return User
-     */
-    public function setPlainPassword($plainPassword)
-    {
-        $this->plainPassword = $plainPassword;
-        return $this;
-    }
+	/**
+	 * Random string sent to the user email address in order to verify it.
+	 *
+	 * @var string
+	 *
+	 * @ORM\Column(type="string", length=180, nullable=true)
+	 */
+	protected $confirmationToken;
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * @var \DateTime
+	 *
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	protected $passwordRequestedAt;
 
-    /**
-     * Get firstName
-     *
-     * @return string
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
+	/**
+	 * User constructor.
+	 */
+	public function __construct() {
+		$this->isActive = true;
+	}
 
-    /**
-     * Set firstName
-     *
-     * @param string $firstName
-     *
-     * @return User
-     */
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
+	/**
+	 * @return mixed
+	 */
+	public function getId() {
+		return $this->id;
+	}
 
-        return $this;
-    }
+	/**
+	 * @param $username
+	 *
+	 * @return $this
+	 */
+	public function setUsername( $username ) {
+		$this->username = $username;
 
-    /**
-     * Get lastName
-     *
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
+		return $this;
+	}
 
-    /**
-     * Set lastName
-     *
-     * @param string $lastName
-     *
-     * @return User
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
+	/**
+	 * @return mixed
+	 */
+	public function getUsername() {
+		return $this->username;
+	}
 
-        return $this;
-    }
+	public function getPlainPassword() {
+		return $this->plainPassword;
+	}
 
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
+	public function setPlainPassword( $password ) {
+		$this->plainPassword = $password;
+	}
 
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
+	public function getSalt() {
+		return null;
+	}
 
-        return $this;
-    }
+	public function setSalt() {
+		return null;
+	}
 
-    /**
-     * Get roles
-     *
-     * @return array
-     */
-    public function getRoles()
-    {
-//        return $this->roles;
-        return ['ROLE_USER'];
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getEmail() {
+		return $this->email;
+	}
 
-    /**
-     * Set roles
-     *
-     * @param array $roles
-     *
-     * @return User
-     */
-    public function setRoles($roles)
-    {
-        $this->roles = $roles;
+	/**
+	 * @param mixed $email
+	 *
+	 * @return User
+	 */
+	public function setEmail( $email ) {
+		$this->email    = $email;
+		$this->username = $email;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get password
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getPassword() {
+		return $this->password;
+	}
 
-    /**
-     * Set password
-     *
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
+	/**
+	 * @param mixed $password
+	 *
+	 * @return User
+	 */
+	public function setPassword( $password ) {
+		$this->password = $password;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get salt
-     *
-     * @return string
-     */
-    public function getSalt()
-    {
-        return $this->salt;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function isActive() {
+		return $this->isActive;
+	}
 
-    /**
-     * Set salt
-     *
-     * @param string $salt
-     *
-     * @return User
-     */
-    public function setSalt($salt)
-    {
-        $this->salt = $salt;
+	/**
+	 * @param mixed $isActive
+	 *
+	 * @return User
+	 */
+	public function setActive( $isActive ) {
+		$this->isActive = $isActive;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function eraseCredentials() {
-        $this->plainPassword = null;
-    }
+	public function getRoles() {
+		return [ 'ROLE_USER' ];
+	}
+
+	public function eraseCredentials() {
+	}
+
+	public function isAccountNonExpired() {
+		return true;
+	}
+
+	public function isAccountNonLocked() {
+		return true;
+	}
+
+	public function isCredentialsNonExpired() {
+		return true;
+	}
+
+	public function isEnabled() {
+		return $this->isActive;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getConfirmationToken() {
+		return $this->confirmationToken;
+	}
+
+	/**
+	 * @param $confirmationToken
+	 *
+	 * @return $this
+	 */
+	public function setConfirmationToken( $confirmationToken ) {
+		$this->confirmationToken = $confirmationToken;
+
+		return $this;
+	}
+
+	/**
+	 * @param \DateTime|null $date
+	 *
+	 * @return $this
+	 */
+	public function setPasswordRequestedAt( \DateTime $date = null ) {
+		$this->passwordRequestedAt = $date;
+
+		return $this;
+	}
+
+	/**
+	 * Gets the timestamp that the user requested a password reset.
+	 *
+	 * @return null|\DateTime
+	 */
+	public function getPasswordRequestedAt() {
+		return $this->passwordRequestedAt;
+	}
+
+	/**
+	 * @param $ttl
+	 *
+	 * @return bool
+	 */
+	public function isPasswordRequestNonExpired( $ttl ) {
+		return $this->getPasswordRequestedAt() instanceof \DateTime &&
+		       $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
+	}
+
+	/** @see \Serializable::serialize() */
+	public function serialize() {
+		return serialize( array(
+			$this->id,
+			$this->email,
+			$this->username,
+			$this->password,
+			$this->isActive,
+		) );
+	}
+
+	/**
+	 * @see \Serializable::unserialize()
+	 *
+	 * @param string $serialized
+	 *
+	 * @return array
+	 */
+	public function unserialize( $serialized ) {
+		return list (
+			$this->id,
+			$this->email,
+			$this->username,
+			$this->password,
+			$this->isActive,
+			) = unserialize( $serialized );
+	}
 }
-

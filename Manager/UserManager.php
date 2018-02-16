@@ -1,51 +1,91 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: nicolas
- * Date: 01/03/17
- * Time: 16:12
+ * User: matthieu
+ * Date: 24/11/17
+ * Time: 08:13
  */
 
 namespace Lch\UserBundle\Manager;
 
-
-use Doctrine\ORM\EntityManager;
 use Lch\UserBundle\Entity\User;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Lch\UserBundle\Util\PasswordUpdater;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
-class UserManager
-{
+/**
+ * Class UserManager
+ * @package App\Manager
+ */
+class UserManager {
+	/** @var EntityManagerInterface */
+	private $em;
 
-    /**
-     * @var EntityManager
-     */
-    private  $entityManager;
+	/** @var PasswordUpdater */
+	private $passwordUpdater;
 
-    /**
-     * @var EncoderFactoryInterface
-     */
-    private $encoderFactory;
+	/**
+	 * UserManager constructor.
+	 *
+	 * @param EntityManagerInterface $em
+	 * @param PasswordUpdater $passwordUpdater
+	 */
+	public function __construct( EntityManagerInterface $em, PasswordUpdater $passwordUpdater ) {
+		$this->em              = $em;
+		$this->passwordUpdater = $passwordUpdater;
+	}
 
-    /**
-     * UserManager constructor.
-     * @param EntityManager $entityManager
-     */
-    public function __construct(EntityManager $entityManager, EncoderFactoryInterface $encoderFactory) {
+	/**
+	 * Find a user by his username
+	 *
+	 * @param string $username
+	 *
+	 * @return AdvancedUserInterface|null
+	 */
+	public function findUserByUsername( $username ) {
+		$user = $this->em->getRepository( 'App\Entity\User' )->findOneBy( [ 'username' => $username ] );
 
-        $this->entityManager = $entityManager;
-        $this->encoderFactory = $encoderFactory;
-    }
+		return $user;
+	}
 
-    public function create($firstName, $lastName, $username, $email, $plainPassword) {
-        $user = new User();
-        $user->setFirstName($firstName);
-        $user->setLastName($lastName);
-        $user->setEmail($email);
-        $user->setUsername($username);
-        $user->setPassword($this->encoderFactory->getEncoder($user)->encodePassword($plainPassword, $user->getSalt()));
+	/**
+	 * Update a user
+	 *
+	 * @param AdvancedUserInterface $user
+	 *
+	 * @param bool $andFlush
+	 */
+	public function updateUser( AdvancedUserInterface $user, $andFlush = true ) {
+		$this->em->persist( $user );
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-    }
+		if ( $andFlush ) {
+			$this->em->flush();
+		}
+	}
+
+	/**
+	 * Find a user by his confirmationToken
+	 *
+	 * @param $confirmationToken
+	 *
+	 * @return AdvancedUserInterface|null
+	 */
+	public function findUserByConfirmationToken( $confirmationToken ) {
+		$user = $this->em->getRepository( 'App\Entity\User' )->findOneBy( [ 'confirmationToken' => $confirmationToken ] );
+
+		return $user;
+	}
+
+	/**
+	 * Encode & update user password
+	 *
+	 * @param User $user
+	 *
+	 * @throws \Exception
+	 */
+	public function updateUserPassword( User $user ) {
+		$this->passwordUpdater->hashPassword( $user );
+		$user->setConfirmationToken( null );
+		$user->setPasswordRequestedAt( null );
+	}
 }
