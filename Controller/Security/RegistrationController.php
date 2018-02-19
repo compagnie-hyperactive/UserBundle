@@ -18,7 +18,7 @@ class RegistrationController extends Controller
 {
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $user = new User();
+	    $user = $this->get('lch_user_manager')->create();
         $form = $this->createForm(RegistrationType::class, $user);
 
         $form->handleRequest($request);

@@ -1,14 +1,28 @@
-lch_user_login:
-  path:     /login
-  methods: ['GET']
-  defaults: { _controller: LchUserBundle:Default:login }
+# Security
+login:
+    path: /admin/login
+    defaults: { _controller: 'Lch\UserBundle\Controller\Security\SecurityController::login' }
+logout:
+    path: /admin/logout
 
-lch_user_login_check:
-  path:     /login_check
-  methods: ['POST']
-  defaults: { _controller: LchUserBundle:Default:check }
+# Resetting
+request_password:
+    path: /resetting/request-password
+    defaults: { _controller: 'Lch\UserBundle\Controller\Security\ResettingController::requestPassword' }
 
-lch_user_login_logout:
-  path:     /logout
-  methods: ['GET']
-  defaults: { _controller: LchUserBundle:Default:logout }
+send_email:
+    path: /resetting/send-email
+    defaults: { _controller: 'Lch\UserBundle\Controller\Security\ResettingController::sendEmail' }
+
+check_email:
+    path: /resetting/check-email
+    defaults: { _controller: 'Lch\UserBundle\Controller\Security\ResettingController::checkEmail' }
+
+reset_email:
+    path: /resetting/reset/{token}
+    defaults: { _controller: 'Lch\UserBundle\Controller\Security\ResettingController::reset' }
+
+# Registration
+registration:
+    path: /registration
+    defaults: { _controller: 'Lch\UserBundle\Controller\Security\RegistrationController::register'}
