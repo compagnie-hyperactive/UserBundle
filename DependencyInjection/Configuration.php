@@ -25,10 +25,12 @@ class Configuration implements ConfigurationInterface
         // more information on that topic.
 
 	    $rootNode
-		    ->scalarNode('user_class')
-		        ->info('Defines the user class to be used. It have to extends Lch\UserBundle\Entity\User')
-                ->isRequired()
-		        ->cannotBeEmpty()
+		    ->children()
+			    ->scalarNode('user_class')
+			        ->info('Defines the user class to be used. It have to extends Lch\UserBundle\Entity\User')
+	                ->isRequired()
+			        ->cannotBeEmpty()
+			    ->end()
 		    ->end()
 	    ;
 
