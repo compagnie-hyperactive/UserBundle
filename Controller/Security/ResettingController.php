@@ -36,15 +36,14 @@ class ResettingController extends Controller
      * Step 2: Send a resetting password email to user
      *
      * @param Request $request
-     * @param UserManager $userManager
-     * @param Mailer $mailer
-     * @param TokenGenerator $tokenGenerator
-     *
      * @return RedirectResponse
      */
-    public function sendEmail(Request $request, UserManager $userManager, Mailer $mailer, TokenGenerator $tokenGenerator)
+    public function sendEmail(Request $request)
     {
         $username = $request->request->get('username');
+        $userManager = $this->get('lch_user_manager');
+        $mailer = $this->get('lch_user_mailer');
+	    $tokenGenerator = $this->get('lch_user_token_generator');
 
         /** @var User $user */
         $user = $userManager->findUserByUsername($username);
@@ -91,12 +90,13 @@ class ResettingController extends Controller
      *
      * @param Request $request
      * @param $token
-     * @param UserManager $userManager
      *
      * @return RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function reset(Request $request, $token, UserManager $userManager)
+    public function reset(Request $request, $token)
     {
+	    $userManager = $this->get('lch_user_manager');
+
         $user = $userManager->findUserByConfirmationToken($token);
 
         if (null === $user) {

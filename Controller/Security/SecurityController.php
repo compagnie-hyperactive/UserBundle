@@ -18,7 +18,6 @@ class SecurityController extends Controller
      */
     public function login()
     {
-
         $error = $this->get('security.authentication_utils')->getLastAuthenticationError();
 
         // last username entered by the user

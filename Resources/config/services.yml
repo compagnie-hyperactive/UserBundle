@@ -1,8 +1,13 @@
 services:
-  lch_token_generator:
+
+  lch_user_mailer:
+    class: Lch\UserBundle\Util\Mailer
+    arguments: ['@router', '@twig', '@swiftmailer.mailer.default']
+
+  lch_user_token_generator:
     class: Lch\UserBundle\Util\TokenGenerator
 
-  lch_password_updater:
+  lch_user_password_updater:
     class: Lch\UserBundle\Util\PasswordUpdater
     arguments: ['@security.encoder_factory']
 
