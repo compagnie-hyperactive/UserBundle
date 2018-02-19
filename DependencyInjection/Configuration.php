@@ -12,13 +12,15 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
+	const ROOT_NODE = 'lch_user';
+	const USER_CLASS = 'user_class';
     /**
      * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('lch_user');
+        $rootNode = $treeBuilder->root(static::ROOT_NODE);
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
@@ -26,7 +28,7 @@ class Configuration implements ConfigurationInterface
 
 	    $rootNode
 		    ->children()
-			    ->scalarNode('user_class')
+			    ->scalarNode(static::USER_CLASS)
 			        ->info('Defines the user class to be used. It have to extends Lch\UserBundle\Entity\User')
 	                ->isRequired()
 			        ->cannotBeEmpty()
