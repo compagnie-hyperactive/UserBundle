@@ -25,14 +25,29 @@ class UserManager {
 	private $passwordUpdater;
 
 	/**
+	 * @var string $userClass the user class FQDN
+	 */
+	private $userClass;
+
+	/**
 	 * UserManager constructor.
 	 *
 	 * @param EntityManagerInterface $em
 	 * @param PasswordUpdater $passwordUpdater
+	 * @param $userClass string the app class user
 	 */
-	public function __construct( EntityManagerInterface $em, PasswordUpdater $passwordUpdater ) {
+	public function __construct( EntityManagerInterface $em, PasswordUpdater $passwordUpdater, $userClass ) {
 		$this->em              = $em;
 		$this->passwordUpdater = $passwordUpdater;
+		$this->userClass       = $userClass;
+	}
+
+
+	/**
+	 * @return User
+	 */
+	public function create() {
+		return new $this->userClass();
 	}
 
 	/**
@@ -43,7 +58,7 @@ class UserManager {
 	 * @return AdvancedUserInterface|null
 	 */
 	public function findUserByUsername( $username ) {
-		$user = $this->em->getRepository( 'App\Entity\User' )->findOneBy( [ 'username' => $username ] );
+		$user = $this->em->getRepository( $this->userClass )->findOneBy( [ 'username' => $username ] );
 
 		return $user;
 	}
@@ -71,7 +86,7 @@ class UserManager {
 	 * @return AdvancedUserInterface|null
 	 */
 	public function findUserByConfirmationToken( $confirmationToken ) {
-		$user = $this->em->getRepository( 'App\Entity\User' )->findOneBy( [ 'confirmationToken' => $confirmationToken ] );
+		$user = $this->em->getRepository( $this->userClass )->findOneBy( [ 'confirmationToken' => $confirmationToken ] );
 
 		return $user;
 	}

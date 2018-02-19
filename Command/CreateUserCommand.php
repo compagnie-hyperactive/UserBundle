@@ -67,7 +67,7 @@ class CreateUserCommand extends Command {
 		$question->setHiddenFallback( false );
 		$password = $helper->ask( $input, $output, $question );
 
-		$user = new User();
+		$user = $this->userManager->create();
 
 		$user->setEmail( $email );
 		$user->setUsername( $username );
