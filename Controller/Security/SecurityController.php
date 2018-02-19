@@ -14,17 +14,17 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends Controller
 {
     /**
-     * @param AuthenticationUtils $authUtils
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function login(AuthenticationUtils $authUtils)
+    public function login()
     {
-        $error = $authUtils->getLastAuthenticationError();
+
+        $error = $this->get('security.authentication_utils')->getLastAuthenticationError();
 
         // last username entered by the user
-        $lastUsername = $authUtils->getLastUsername();
+        $lastUsername = $this->get('security.authentication_utils')->getLastUsername();
 
-        return $this->render('Security/login.html.twig', [
+        return $this->render('@LchUser/Security/login.html.twig', [
             'error' => $error,
             'last_username' => $lastUsername,
         ]);

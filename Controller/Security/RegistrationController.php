@@ -36,7 +36,7 @@ class RegistrationController extends Controller
         }
 
         return $this->render(
-            'Security/registration/register.html.twig',
+            '@LchUser/Security/registration/register.html.twig',
             array('form' => $form->createView())
         );
     }

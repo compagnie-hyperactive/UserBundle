@@ -29,7 +29,7 @@ class ResettingController extends Controller
      */
     public function requestPassword()
     {
-        return $this->render('Security/request-password.html.twig');
+        return $this->render('@LchUser/Security/request-password.html.twig');
     }
 
     /**
@@ -81,7 +81,7 @@ class ResettingController extends Controller
             return new RedirectResponse($this->generateUrl('fos_user_resetting_request'));
         }
 
-        return $this->render('Security/check-email.html.twig', array(
+        return $this->render('@LchUser/Security/check-email.html.twig', array(
             'tokenLifetime' => ceil($this->ttl / 3600),
         ));
     }
@@ -114,7 +114,7 @@ class ResettingController extends Controller
             return $this->redirectToRoute('login');
         }
 
-        return $this->render('Security/reset-password.html.twig', [
+        return $this->render('@LchUser/Security/reset-password.html.twig', [
             'form' => $form->createView(),
         ]);
     }
