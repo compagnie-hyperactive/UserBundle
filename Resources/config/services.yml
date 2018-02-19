@@ -12,7 +12,7 @@ services:
 
   lch_user_create_command:
     class: Lch\UserBundle\Command\CreateUserCommand
-    arguments: ['@lch_user_manager']
+    arguments: ['@lch_user_manager', '%lch_user.user_class%']
     tags:
       - {name: console.command}
 
