@@ -80,7 +80,7 @@ class Configuration implements ConfigurationInterface
 					->children()
 						->scalarNode(static::LOGIN)
 						->info('Defines the login template. Use @LchUser/Security/login.html.twig as inspiration')
-						->isRequired()
+						->cannotBeEmpty()
 						->defaultValue('@LchUser/Security/login.html.twig')
 					->end()
 				->end()
