@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+// TODO extract all mapping informations to be ORM agnostic
 /**
  * @ORM\MappedSuperclass()
  * @UniqueEntity(fields="email", message="Email already taken")
