@@ -11,6 +11,7 @@ namespace Lch\UserBundle\Manager;
 use Lch\UserBundle\Entity\User;
 use Lch\UserBundle\Util\PasswordUpdater;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
@@ -30,15 +31,23 @@ class UserManager {
 	private $userClass;
 
 	/**
+	 * @var UserPasswordEncoderInterface
+	 */
+	private $passwordEncoder;
+
+
+	/**
 	 * UserManager constructor.
 	 *
 	 * @param EntityManagerInterface $em
 	 * @param PasswordUpdater $passwordUpdater
+	 * @param UserPasswordEncoderInterface $passwordEncoder
 	 * @param $userClass string the app class user
 	 */
-	public function __construct( EntityManagerInterface $em, PasswordUpdater $passwordUpdater, $userClass ) {
+	public function __construct( EntityManagerInterface $em, PasswordUpdater $passwordUpdater, UserPasswordEncoderInterface $passwordEncoder, $userClass ) {
 		$this->em              = $em;
 		$this->passwordUpdater = $passwordUpdater;
+		$this->passwordEncoder = $passwordEncoder;
 		$this->userClass       = $userClass;
 	}
 
@@ -102,5 +111,15 @@ class UserManager {
 		$this->passwordUpdater->hashPassword( $user );
 		$user->setConfirmationToken( null );
 		$user->setPasswordRequestedAt( null );
+	}
+
+	/**
+	 * @param User $user
+	 * @param $clearPassword
+	 *
+	 * @return mixed
+	 */
+	public function encodePassword(User $user, $clearPassword) {
+		return $this->passwordEncoder->encodePassword($user, $clearPassword);
 	}
 }
