@@ -30,6 +30,12 @@ class LchUserExtension extends Extension
 		    $config[Configuration::CLASSES][Configuration::USER_CLASS]
 	    );
 
+	    // Set manager class as parameter to be used for service dependency injection
+	    $container->setParameter(
+		    Configuration::ROOT_NODE . '.' . Configuration::CLASSES . '.' . Configuration::MANAGER_CLASS,
+		    $config[Configuration::CLASSES][Configuration::MANAGER_CLASS]
+	    );
+
 	    // Set Resetting TTL as parameter
 	    $container->setParameter(
 	    	Configuration::ROOT_NODE . '.' . Configuration::RESETTING_TTL,

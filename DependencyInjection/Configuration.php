@@ -2,6 +2,7 @@
 
 namespace Lch\UserBundle\DependencyInjection;
 
+use Lch\UserBundle\Manager\UserManager;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -53,9 +54,10 @@ class Configuration implements ConfigurationInterface
 							->cannotBeEmpty()
 						->end()
 						->scalarNode(static::MANAGER_CLASS)
-							->info('Defines the TTL for the resetting link')
+							->info('Defines the user manager class to be used. Use  Lch\UserBundle\Manager\User as an example')
+							->isRequired()
+							->defaultValue(UserManager::class)
 							->cannotBeEmpty()
-							->defaultValue(1114400)
 						->end()
 					->end()
 				->end()

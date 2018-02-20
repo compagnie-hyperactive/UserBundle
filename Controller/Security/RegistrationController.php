@@ -24,13 +24,13 @@ class RegistrationController extends Controller
 	 */
 	public function register(Request $request)
 	{
-		$user = $this->get('lch_user_manager')->create();
+		$user = $this->get('lch_user.manager')->create();
 		$form = $this->createForm(RegistrationType::class, $user);
 
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 
-			$password = $this->get('lch_user_manager')->encodePassword($user, $user->getPlainPassword());
+			$password = $this->get('lch_user.manager')->encodePassword($user, $user->getPlainPassword());
 			$user->setPassword($password);
 
 			$em = $this->getDoctrine()->getManager();

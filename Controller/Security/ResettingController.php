@@ -40,9 +40,9 @@ class ResettingController extends Controller
 	public function sendEmail(Request $request)
 	{
 		$username = $request->request->get('username');
-		$userManager = $this->get('lch_user_manager');
-		$mailer = $this->get('lch_user_mailer');
-		$tokenGenerator = $this->get('lch_user_token_generator');
+		$userManager = $this->get('lch_user.manager');
+		$mailer = $this->get('lch_user.mailer');
+		$tokenGenerator = $this->get('lch_user.token_generator');
 
 		/** @var User $user */
 		$user = $userManager->findUserByUsername($username);
@@ -94,7 +94,7 @@ class ResettingController extends Controller
 	 */
 	public function reset(Request $request, $token)
 	{
-		$userManager = $this->get('lch_user_manager');
+		$userManager = $this->get('lch_user.manager');
 
 		$user = $userManager->findUserByConfirmationToken($token);
 
