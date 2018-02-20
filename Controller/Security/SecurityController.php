@@ -23,7 +23,7 @@ class SecurityController extends Controller
         // last username entered by the user
         $lastUsername = $this->get('security.authentication_utils')->getLastUsername();
 
-        return $this->render($this->get('lch_user.templates.login'), [
+        return $this->render($this->getParameter('lch_user.templates.login'), [
             'error' => $error,
             'last_username' => $lastUsername,
         ]);
