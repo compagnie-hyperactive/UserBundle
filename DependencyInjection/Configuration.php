@@ -13,9 +13,19 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
 	const ROOT_NODE = 'lch_user';
+	const RESETTING_TTL = 'resetting_ttl';
+
+	/**
+	 * Classes
+	 */
+	const CLASSES = 'classes';
 	const USER_CLASS = 'user_class';
-	const RESETTING = 'resetting';
-	const TTL = 'ttl';
+	const MANAGER_CLASS = 'manager_class';
+
+	/**
+	 * Templates
+	 */
+	const TEMPLATES = 'templates';
 	/**
 	 * {@inheritdoc}
 	 */
@@ -30,14 +40,19 @@ class Configuration implements ConfigurationInterface
 
 		$rootNode
 			->children()
-				->scalarNode(static::USER_CLASS)
-					->info('Defines the user class to be used. It have to extends Lch\UserBundle\Entity\User')
+				->scalarNode(static::RESETTING_TTL)
+					->info('Defines the TTL for the resetting link')
 					->isRequired()
 					->cannotBeEmpty()
 				->end()
-				->arrayNode(static::RESETTING)
+				->arrayNode(static::CLASSES)
 					->children()
-						->scalarNode(static::TTL)
+						->scalarNode(static::USER_CLASS)
+							->info('Defines the user class to be used. It have to extends Lch\UserBundle\Entity\User')
+							->isRequired()
+							->cannotBeEmpty()
+						->end()
+						->scalarNode(static::MANAGER_CLASS)
 							->info('Defines the TTL for the resetting link')
 							->cannotBeEmpty()
 							->defaultValue(1114400)

@@ -114,7 +114,6 @@ class UserManager {
 	}
 
 	/**
-	 * TODO See if this can be removed to be able to use updateUserPassword algo & tools
 	 * @param User $user
 	 * @param $clearPassword
 	 *

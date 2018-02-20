@@ -47,7 +47,7 @@ class ResettingController extends Controller
 		/** @var User $user */
 		$user = $userManager->findUserByUsername($username);
 
-		if (null !== $user && !$user->isPasswordRequestNonExpired($this->getParameter('lch_user.resetting.ttl'))) {
+		if (null !== $user && !$user->isPasswordRequestNonExpired($this->getParameter('lch_user.resetting_ttl'))) {
 
 			if (null === $user->getConfirmationToken()) {
 				$user->setConfirmationToken($tokenGenerator->generateToken());
@@ -80,7 +80,7 @@ class ResettingController extends Controller
 		}
 
 		return $this->render('@LchUser/Security/check-email.html.twig', array(
-			'tokenLifetime' => ceil($this->getParameter('lch_user.resetting.ttl') / 3600),
+			'tokenLifetime' => ceil($this->getParameter('lch_user.resetting_ttl') / 3600),
 		));
 	}
 

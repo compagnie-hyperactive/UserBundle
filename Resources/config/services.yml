@@ -20,7 +20,7 @@ services:
 
   lch_user_manager:
     class: '%lch_user.manager.class%'
-    arguments: ['@doctrine.orm.entity_manager', '@lch_user_password_updater', '@security.user_password_encoder.generic', '%lch_user.user_class%']
+    arguments: ['@doctrine.orm.entity_manager', '@lch_user_password_updater', '@security.user_password_encoder.generic', '%lch_user.classes.user_class%']
 
   lch_user_create_command:
     class: '%lch_user.create_command.class%'
