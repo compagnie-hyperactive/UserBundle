@@ -3,6 +3,7 @@
 namespace Lch\UserBundle\DependencyInjection;
 
 use Lch\UserBundle\Manager\UserManager;
+use Lch\UserBundle\Util\Mailer;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -22,6 +23,7 @@ class Configuration implements ConfigurationInterface
 	const CLASSES = 'classes';
 	const USER_CLASS = 'user_class';
 	const MANAGER_CLASS = 'manager_class';
+	const MAILER_CLASS = 'mailer_class';
 
 	/**
 	 * Templates
@@ -54,8 +56,13 @@ class Configuration implements ConfigurationInterface
 							->cannotBeEmpty()
 						->end()
 						->scalarNode(static::MANAGER_CLASS)
-							->info('Defines the user manager class to be used. Use  Lch\UserBundle\Manager\User as an example')				
+							->info('Defines the user manager class to be used. Use Lch\UserBundle\Manager\User as an example')
 							->defaultValue(UserManager::class)
+							->cannotBeEmpty()
+						->end()
+						->scalarNode(static::MAILER_CLASS)
+							->info('Defines the mailer class to be used. Use Lch\UserBundle\Util\Mailer as an example')
+							->defaultValue(Mailer::class)
 							->cannotBeEmpty()
 						->end()
 					->end()

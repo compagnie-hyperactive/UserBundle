@@ -1,5 +1,4 @@
 parameters:
-  lch_user.mailer.class: Lch\UserBundle\Util\Mailer
   lch_user.token_generator.class: Lch\UserBundle\Util\TokenGenerator
   lch_user.password_updater.class: Lch\UserBundle\Util\PasswordUpdater
   lch_user.create_command.class: Lch\UserBundle\Command\CreateUserCommand
@@ -7,7 +6,7 @@ parameters:
 
 services:
   lch_user.mailer:
-    class: '%lch_user.mailer.class%'
+    class: '%lch_user.classes.mailer_class%'
     arguments: ['@router', '@twig', '@swiftmailer.mailer.default']
 
   lch_user.token_generator:

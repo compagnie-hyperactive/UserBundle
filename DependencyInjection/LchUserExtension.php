@@ -14,38 +14,35 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class LchUserExtension extends Extension
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function load(array $configs, ContainerBuilder $container)
-    {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+	/**
+	 * {@inheritdoc}
+	 */
+	public function load(array $configs, ContainerBuilder $container)
+	{
+		$configuration = new Configuration();
+		$config = $this->processConfiguration($configuration, $configs);
 
-        // TODO Check provided user class is instance of User
+		//TODO Check provided user class is instance of User
 
-	    // Set user class as parameter to be used for service dependency injection
-	    $container->setParameter(
-	    	Configuration::ROOT_NODE . '.' . Configuration::CLASSES . '.' . Configuration::USER_CLASS,
-		    $config[Configuration::CLASSES][Configuration::USER_CLASS]
-	    );
-
-	    // Set manager class as parameter to be used for service dependency injection
-	    $container->setParameter(
-		    Configuration::ROOT_NODE . '.' . Configuration::CLASSES . '.' . Configuration::MANAGER_CLASS,
-		    $config[Configuration::CLASSES][Configuration::MANAGER_CLASS]
-	    );
-
-	    // Set Resetting TTL as parameter
-	    $container->setParameter(
-	    	Configuration::ROOT_NODE . '.' . Configuration::RESETTING_TTL,
-		    $config[Configuration::RESETTING_TTL]
-	    );
-
-	    // Defines classes parameters
+		// Make class mapping with parameters for further use (DI)
+		array_map(function($fqdnClass, $key) use ($container){
+			$container->setParameter(
+				Configuration::ROOT_NODE . '.' . Configuration::CLASSES . '.' . $key,
+				$fqdnClass
+			);
+		}, $config[Configuration::CLASSES], array_keys($config[Configuration::CLASSES]));
 
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
-    }
+		// Set Resetting TTL as parameter
+		$container->setParameter(
+			Configuration::ROOT_NODE . '.' . Configuration::RESETTING_TTL,
+			$config[Configuration::RESETTING_TTL]
+		);
+
+		// Defines classes parameters
+
+
+		$loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+		$loader->load('services.yml');
+	}
 }
