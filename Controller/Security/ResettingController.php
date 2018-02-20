@@ -79,7 +79,7 @@ class ResettingController extends Controller
 			return new RedirectResponse($this->generateUrl('fos_user_resetting_request'));
 		}
 
-		return $this->render('@LchUser/Security/check-email.html.twig', array(
+		return $this->render($this->getParameter('lch_user.templates.check_email'), array(
 			'tokenLifetime' => ceil($this->getParameter('lch_user.resetting_ttl') / 3600),
 		));
 	}
@@ -113,7 +113,7 @@ class ResettingController extends Controller
 			return $this->redirectToRoute('lch_login');
 		}
 
-		return $this->render('@LchUser/Security/reset-password.html.twig', [
+		return $this->render($this->getParameter('lch_user.templates.reset_password'), [
 			'form' => $form->createView(),
 		]);
 	}

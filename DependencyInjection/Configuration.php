@@ -32,6 +32,9 @@ class Configuration implements ConfigurationInterface
 	 */
 	const TEMPLATES = 'templates';
 	const LOGIN = 'login';
+	const REGISTRATION = 'registration';
+	const CHECK_EMAIL = 'check_email';
+	const RESET_PASSWORD = 'reset_password';
 
 	/**
 	 * {@inheritdoc}
@@ -80,9 +83,24 @@ class Configuration implements ConfigurationInterface
 					->canBeEnabled()
 					->children()
 						->scalarNode(static::LOGIN)
-							->info('Defines the login template. Use @LchUser/Security/login.html.twig as inspiration')
+							->info('Defines the login template. Use @LchUser/login.html.twig as inspiration')
 							->cannotBeEmpty()
-							->defaultValue('@LchUser/Security/login.html.twig')
+							->defaultValue('@LchUser/login.html.twig')
+						->end()
+						->scalarNode(static::REGISTRATION)
+							->info('Defines the registration template. Use @LchUser/registration/register.html.twig as inspiration')
+							->cannotBeEmpty()
+							->defaultValue('@LchUser/registration/register.html.twig')
+						->end()
+						->scalarNode(static::CHECK_EMAIL)
+							->info('Defines the check email template. Use @LchUser/check-email.html.twig as inspiration')
+							->cannotBeEmpty()
+							->defaultValue('@LchUser/check-email.html.twig')
+						->end()
+						->scalarNode(static::RESET_PASSWORD)
+							->info('Defines the reset password template. Use @LchUser/reset-password.html.twig as inspiration')
+							->cannotBeEmpty()
+							->defaultValue('@LchUser/reset-password.html.twig')
 						->end()
 					->end()
 				->end()
