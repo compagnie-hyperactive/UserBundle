@@ -20,102 +20,101 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ResettingController extends Controller
 {
-    private $ttl = 1114400; // 310 heures
 
-    /**
-     * Step 1: Display a form to ask username
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function requestPassword()
-    {
-        return $this->render('@LchUser/Security/request-password.html.twig');
-    }
+	/**
+	 * Step 1: Display a form to ask username
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function requestPassword()
+	{
+		return $this->render('@LchUser/Security/request-password.html.twig');
+	}
 
-    /**
-     * Step 2: Send a resetting password email to user
-     *
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function sendEmail(Request $request)
-    {
-        $username = $request->request->get('username');
-        $userManager = $this->get('lch_user_manager');
-        $mailer = $this->get('lch_user_mailer');
-	    $tokenGenerator = $this->get('lch_user_token_generator');
+	/**
+	 * Step 2: Send a resetting password email to user
+	 *
+	 * @param Request $request
+	 * @return RedirectResponse
+	 */
+	public function sendEmail(Request $request)
+	{
+		$username = $request->request->get('username');
+		$userManager = $this->get('lch_user_manager');
+		$mailer = $this->get('lch_user_mailer');
+		$tokenGenerator = $this->get('lch_user_token_generator');
 
-        /** @var User $user */
-        $user = $userManager->findUserByUsername($username);
+		/** @var User $user */
+		$user = $userManager->findUserByUsername($username);
 
-        if (null !== $user && !$user->isPasswordRequestNonExpired($this->ttl)) {
+		if (null !== $user && !$user->isPasswordRequestNonExpired($this->getParameter('lch_user.resetting.ttl'))) {
 
-            if (null === $user->getConfirmationToken()) {
-                $user->setConfirmationToken($tokenGenerator->generateToken());
-            }
+			if (null === $user->getConfirmationToken()) {
+				$user->setConfirmationToken($tokenGenerator->generateToken());
+			}
 
-            // Send Email
-            $mailer->sendResetPasswordEmail($user);
+			// Send Email
+			$mailer->sendResetPasswordEmail($user);
 
-            $user->setPasswordRequestedAt(new \DateTime());
-            $userManager->updateUser($user);
-        }
+			$user->setPasswordRequestedAt(new \DateTime());
+			$userManager->updateUser($user);
+		}
 
-        return new RedirectResponse($this->generateUrl('check_email', ['username' => $username]));
-    }
+		return new RedirectResponse($this->generateUrl('check_email', ['username' => $username]));
+	}
 
-    /**
-     * Step 3: Inform user that an email has been sent
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function checkEmail(Request $request)
-    {
-        $username = $request->query->get('username');
+	/**
+	 * Step 3: Inform user that an email has been sent
+	 *
+	 * @param Request $request
+	 *
+	 * @return RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
+	public function checkEmail(Request $request)
+	{
+		$username = $request->query->get('username');
 
-        if (empty($username)) {
-            // the user does not come from the sendEmail action
-            return new RedirectResponse($this->generateUrl('fos_user_resetting_request'));
-        }
+		if (empty($username)) {
+			// the user does not come from the sendEmail action
+			return new RedirectResponse($this->generateUrl('fos_user_resetting_request'));
+		}
 
-        return $this->render('@LchUser/Security/check-email.html.twig', array(
-            'tokenLifetime' => ceil($this->ttl / 3600),
-        ));
-    }
+		return $this->render('@LchUser/Security/check-email.html.twig', array(
+			'tokenLifetime' => ceil($this->ttl / 3600),
+		));
+	}
 
-    /**
-     * Step 4: Display a form for choose a new password
-     *
-     * @param Request $request
-     * @param $token
-     *
-     * @return RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function reset(Request $request, $token)
-    {
-	    $userManager = $this->get('lch_user_manager');
+	/**
+	 * Step 4: Display a form for choose a new password
+	 *
+	 * @param Request $request
+	 * @param $token
+	 *
+	 * @return RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
+	public function reset(Request $request, $token)
+	{
+		$userManager = $this->get('lch_user_manager');
 
-        $user = $userManager->findUserByConfirmationToken($token);
+		$user = $userManager->findUserByConfirmationToken($token);
 
-        if (null === $user) {
-            throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
-        }
+		if (null === $user) {
+			throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
+		}
 
-        $form = $this->createForm(ResetPasswordType::class, $user);
+		$form = $this->createForm(ResetPasswordType::class, $user);
 
-        $form->handleRequest($request);
+		$form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $userManager->updateUserPassword($user);
-            $userManager->updateUser($user);
+		if ($form->isSubmitted() && $form->isValid()) {
+			$userManager->updateUserPassword($user);
+			$userManager->updateUser($user);
 
-            return $this->redirectToRoute('login');
-        }
+			return $this->redirectToRoute('login');
+		}
 
-        return $this->render('@LchUser/Security/reset-password.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
+		return $this->render('@LchUser/Security/reset-password.html.twig', [
+			'form' => $form->createView(),
+		]);
+	}
 }

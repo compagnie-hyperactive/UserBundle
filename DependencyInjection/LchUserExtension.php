@@ -23,8 +23,12 @@ class LchUserExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         // TODO Check provided user class is instance of User
+
 	    // Set user class as parameter to be used for service dependency injection
 	    $container->setParameter(Configuration::ROOT_NODE . '.' . Configuration::USER_CLASS, $config[Configuration::USER_CLASS]);
+
+	    // Set TTL as parameter
+	    $container->setParameter(Configuration::ROOT_NODE . '.' . Configuration::RESETTING . '.' . Configuration::TTL , $config[Configuration::RESETTING][Configuration::TTL]);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

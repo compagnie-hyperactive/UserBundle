@@ -14,28 +14,39 @@ class Configuration implements ConfigurationInterface
 {
 	const ROOT_NODE = 'lch_user';
 	const USER_CLASS = 'user_class';
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigTreeBuilder()
-    {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root(static::ROOT_NODE);
+	const RESETTING = 'resetting';
+	const TTL = 'ttl';
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getConfigTreeBuilder()
+	{
+		$treeBuilder = new TreeBuilder();
+		$rootNode = $treeBuilder->root(static::ROOT_NODE);
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+		// Here you should define the parameters that are allowed to
+		// configure your bundle. See the documentation linked above for
+		// more information on that topic.
 
-	    $rootNode
-		    ->children()
-			    ->scalarNode(static::USER_CLASS)
-			        ->info('Defines the user class to be used. It have to extends Lch\UserBundle\Entity\User')
-	                ->isRequired()
-			        ->cannotBeEmpty()
-			    ->end()
-		    ->end()
-	    ;
+		$rootNode
+			->children()
+				->scalarNode(static::USER_CLASS)
+					->info('Defines the user class to be used. It have to extends Lch\UserBundle\Entity\User')
+					->isRequired()
+					->cannotBeEmpty()
+				->end()
+				->arrayNode(static::RESETTING)
+					->children()
+						->scalarNode(static::TTL)
+							->info('Defines the TTL for the resetting link')
+							->cannotBeEmpty()
+							->defaultValue(1114400)
+						->end()
+					->end()
+				->end()
+			->end()
+		;
 
-        return $treeBuilder;
-    }
+		return $treeBuilder;
+	}
 }
