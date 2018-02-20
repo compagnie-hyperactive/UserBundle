@@ -4,6 +4,7 @@ namespace Lch\UserBundle\DependencyInjection;
 
 use Lch\UserBundle\Manager\UserManager;
 use Lch\UserBundle\Util\Mailer;
+use Lch\UserBundle\Util\TokenGenerator;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -24,6 +25,7 @@ class Configuration implements ConfigurationInterface
 	const USER_CLASS = 'user_class';
 	const MANAGER_CLASS = 'manager_class';
 	const MAILER_CLASS = 'mailer_class';
+	const TOKEN_GENERATOR_CLASS = 'token_generator_class';
 
 	/**
 	 * Templates
@@ -63,6 +65,11 @@ class Configuration implements ConfigurationInterface
 						->scalarNode(static::MAILER_CLASS)
 							->info('Defines the mailer class to be used. Use Lch\UserBundle\Util\Mailer as an example')
 							->defaultValue(Mailer::class)
+							->cannotBeEmpty()
+						->end()
+						->scalarNode(static::TOKEN_GENERATOR_CLASS)
+							->info('Defines the token generation class to be used. Use Lch\UserBundle\Util\TokenGenerator as an example')
+							->defaultValue(TokenGenerator::class)
 							->cannotBeEmpty()
 						->end()
 					->end()
