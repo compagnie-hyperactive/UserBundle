@@ -7,7 +7,7 @@
                 <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
 
-            <form action="{{ path('login') }}" method="post">
+            <form action="{{ path('lch_login') }}" method="post">
 
                 <div>
                     <label for="username">Email:</label>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </form>
-            <a href="{{ path('request_password') }}">Forgot password ?</a>
+            <a href="{{ path('lch_request_password') }}">Forgot password ?</a>
         </div>
     </div>
 {% endblock %}
