@@ -60,7 +60,7 @@ class ResettingController extends Controller
 			$userManager->updateUser($user);
 		}
 
-		return new RedirectResponse($this->generateUrl('check_email', ['username' => $username]));
+		return new RedirectResponse($this->generateUrl('lch_check_email', ['username' => $username]));
 	}
 
 	/**
@@ -110,7 +110,7 @@ class ResettingController extends Controller
 			$userManager->updateUserPassword($user);
 			$userManager->updateUser($user);
 
-			return $this->redirectToRoute('login');
+			return $this->redirectToRoute('lch_login');
 		}
 
 		return $this->render('@LchUser/Security/reset-password.html.twig', [

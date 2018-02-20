@@ -29,7 +29,7 @@ class Mailer {
 	}
 
 	public function sendResetPasswordEmail( User $user ) {
-		$url = $this->router->generate( 'reset_email', [ 'token' => $user->getConfirmationToken() ], UrlGeneratorInterface::ABSOLUTE_URL );
+		$url = $this->router->generate( 'lch_reset_email', [ 'token' => $user->getConfirmationToken() ], UrlGeneratorInterface::ABSOLUTE_URL );
 
 		$message = ( new \Swift_Message( 'Réinitialisation de votre mot de passe' ) )
 			->setFrom( 'mama003@gmail.com' )
