@@ -22,8 +22,6 @@ class LchUserExtension extends Extension
 		$configuration = new Configuration();
 		$config = $this->processConfiguration($configuration, $configs);
 
-		//TODO Check provided user class is instance of User
-
 		// Make class mapping with parameters for further use (DI)
 		array_map(function($fqdnClass, $key) use ($container){
 			$container->setParameter(
@@ -33,13 +31,24 @@ class LchUserExtension extends Extension
 		}, $config[Configuration::CLASSES], array_keys($config[Configuration::CLASSES]));
 
 
+		// Make templates mapping with parameters for further use (DI)
+		array_map(function($templatePath, $key) use ($container){
+			$container->setParameter(
+				Configuration::ROOT_NODE . '.' . Configuration::TEMPLATES . '.' . $key,
+				$templatePath
+			);
+		}, $config[Configuration::TEMPLATES], array_keys($config[Configuration::TEMPLATES]));
+
+
+
+
 		// Set Resetting TTL as parameter
 		$container->setParameter(
 			Configuration::ROOT_NODE . '.' . Configuration::RESETTING_TTL,
 			$config[Configuration::RESETTING_TTL]
 		);
 
-		// Defines classes parameters
+		//TODO Check provided classes matching Interface instances
 
 
 		$loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

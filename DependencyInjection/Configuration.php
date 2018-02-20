@@ -22,15 +22,17 @@ class Configuration implements ConfigurationInterface
 	 * Classes
 	 */
 	const CLASSES = 'classes';
-	const USER_CLASS = 'user_class';
-	const MANAGER_CLASS = 'manager_class';
-	const MAILER_CLASS = 'mailer_class';
-	const TOKEN_GENERATOR_CLASS = 'token_generator_class';
+	const USER = 'user';
+	const MANAGER = 'manager';
+	const MAILER = 'mailer';
+	const TOKEN_GENERATOR = 'token_generator';
 
 	/**
 	 * Templates
 	 */
 	const TEMPLATES = 'templates';
+	const LOGIN = 'login';
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -52,26 +54,34 @@ class Configuration implements ConfigurationInterface
 				->end()
 				->arrayNode(static::CLASSES)
 					->children()
-						->scalarNode(static::USER_CLASS)
+						->scalarNode(static::USER)
 							->info('Defines the user class to be used. It have to extends Lch\UserBundle\Entity\User')
 							->isRequired()
 							->cannotBeEmpty()
 						->end()
-						->scalarNode(static::MANAGER_CLASS)
+						->scalarNode(static::MANAGER)
 							->info('Defines the user manager class to be used. Use Lch\UserBundle\Manager\User as an example')
 							->defaultValue(UserManager::class)
 							->cannotBeEmpty()
 						->end()
-						->scalarNode(static::MAILER_CLASS)
+						->scalarNode(static::MAILER)
 							->info('Defines the mailer class to be used. Use Lch\UserBundle\Util\Mailer as an example')
 							->defaultValue(Mailer::class)
 							->cannotBeEmpty()
 						->end()
-						->scalarNode(static::TOKEN_GENERATOR_CLASS)
+						->scalarNode(static::TOKEN_GENERATOR)
 							->info('Defines the token generation class to be used. Use Lch\UserBundle\Util\TokenGenerator as an example')
 							->defaultValue(TokenGenerator::class)
 							->cannotBeEmpty()
 						->end()
+					->end()
+				->end()
+				->arrayNode(static::TEMPLATES)
+					->children()
+						->scalarNode(static::LOGIN)
+						->info('Defines the login template. Use @LchUser/Security/login.html.twig as inspiration')
+						->isRequired()
+						->defaultValue('@LchUser/Security/login.html.twig')
 					->end()
 				->end()
 			->end()

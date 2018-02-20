@@ -5,19 +5,19 @@ parameters:
 
 services:
   lch_user.mailer:
-    class: '%lch_user.classes.mailer_class%'
+    class: '%lch_user.classes.mailer%'
     arguments: ['@router', '@twig', '@swiftmailer.mailer.default']
 
   lch_user.token_generator:
-    class: '%lch_user.classes.token_generator_class%'
+    class: '%lch_user.classes.token_generator%'
 
   lch_user.password_updater:
     class: '%lch_user.password_updater.class%'
     arguments: ['@security.encoder_factory']
 
   lch_user.manager:
-    class: '%lch_user.classes.manager_class%'
-    arguments: ['@doctrine.orm.entity_manager', '@lch_user.password_updater', '@security.user_password_encoder.generic', '%lch_user.classes.user_class%']
+    class: '%lch_user.classes.manager%'
+    arguments: ['@doctrine.orm.entity_manager', '@lch_user.password_updater', '@security.user_password_encoder.generic', '%lch_user.classes.user%']
 
   lch_user.command.create:
     class: '%lch_user.create_command.class%'
