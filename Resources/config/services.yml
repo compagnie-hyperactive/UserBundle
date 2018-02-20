@@ -1,31 +1,34 @@
-services:
+parameters:
+  lch_user_mailer_class: Lch\UserBundle\Util\Mailer
+  lch_user_token_generator_class: Lch\UserBundle\Util\TokenGenerator
+  lch_user_password_updater_class: Lch\UserBundle\Util\PasswordUpdater
+  lch_user_manager_class: Lch\UserBundle\Manager\UserManager
+  lch_user_create_command_class: Lch\UserBundle\Command\CreateUserCommand
+  lch_user_registration_type_class: Lch\UserBundle\Form\Security\RegistrationType
 
+services:
   lch_user_mailer:
-    class: Lch\UserBundle\Util\Mailer
+    class: '%lch_user_mailer_class%'
     arguments: ['@router', '@twig', '@swiftmailer.mailer.default']
 
   lch_user_token_generator:
-    class: Lch\UserBundle\Util\TokenGenerator
+    class: '%lch_user_token_generator_class%'
 
   lch_user_password_updater:
-    class: Lch\UserBundle\Util\PasswordUpdater
+    class: '%lch_user_password_updater_class%'
     arguments: ['@security.encoder_factory']
 
   lch_user_manager:
-    class: Lch\UserBundle\Manager\UserManager
+    class: '%lch_user_manager_class%'
     arguments: ['@doctrine.orm.entity_manager', '@lch_user_password_updater', '@security.user_password_encoder.generic', '%lch_user.user_class%']
 
   lch_user_create_command:
-    class: Lch\UserBundle\Command\CreateUserCommand
+    class: '%lch_user_create_command_class%'
     arguments: ['@lch_user_manager']
     tags:
       - {name: console.command}
 
   lch_user_registration_type:
-    class: Lch\UserBundle\Form\Security\RegistrationType
+    class: '%lch_user_registration_type_class%'
     tags:
         - { name: form.type }
-
-#    lch_user.example:
-#        class: Lch\UserBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
