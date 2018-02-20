@@ -80,7 +80,7 @@ class ResettingController extends Controller
 		}
 
 		return $this->render('@LchUser/Security/check-email.html.twig', array(
-			'tokenLifetime' => ceil($this->ttl / 3600),
+			'tokenLifetime' => ceil($this->getParameter('lch_user.resetting.ttl') / 3600),
 		));
 	}
 
