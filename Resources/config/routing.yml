@@ -1,28 +1,28 @@
 # Security
-login:
+lch_login:
     path: /admin/login
     defaults: { _controller: 'Lch\UserBundle\Controller\Security\SecurityController::login' }
-logout:
+lch_logout:
     path: /admin/logout
 
 # Resetting
-request_password:
+lch_request_password:
     path: /resetting/request-password
     defaults: { _controller: 'Lch\UserBundle\Controller\Security\ResettingController::requestPassword' }
 
-send_email:
+lch_send_email:
     path: /resetting/send-email
     defaults: { _controller: 'Lch\UserBundle\Controller\Security\ResettingController::sendEmail' }
 
-check_email:
+lch_check_email:
     path: /resetting/check-email
     defaults: { _controller: 'Lch\UserBundle\Controller\Security\ResettingController::checkEmail' }
 
-reset_email:
+lch_reset_email:
     path: /resetting/reset/{token}
     defaults: { _controller: 'Lch\UserBundle\Controller\Security\ResettingController::reset' }
 
 # Registration
-registration:
+lch_registration:
     path: /registration
     defaults: { _controller: 'Lch\UserBundle\Controller\Security\RegistrationController::register'}
