@@ -26,10 +26,21 @@ lch_user:
     check_email: '@App\security\reset_password.html.twig' # optional
 ```
 
+Then add routes
+
+```yaml
+lch_user:
+  resource: "@LchUserBundle/Resources/config/routing.yml"
+  prefix:   /
+```
+
 ## Usage
 
 On your app, go to
 * `/admin` : login form, with reset password link
 * `/registration` : simple registration form
+
+## Route override
+Feel free to duplicate and edit `@LchUserBundle/Resources/config/routing.yml` to make you own routes edition.
 
 Completely work in progress. See [Roadmap]() to help.
