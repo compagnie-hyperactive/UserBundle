@@ -13,12 +13,12 @@ composer require lch/user-bundle
 In a dedicated `lch_user.yaml` (for SF 3.4+ with flex) or classical `config.yml`, add following keys:
 ```yaml
 lch_user:
+  resetting_ttl: 86400 # optional  
   classes:
     user: App\Entity\User\User # Mandatory
     manager:  App\Manager\UserManager # optional
     mailer:  App\Util\Mailer # optional
-    token_generator:  App\Util\TokenGenerator # optional
-  resetting_ttl: 86400 # optional
+    token_generator:  App\Util\TokenGenerator # optional  
   templates: # optional
     login: '@App\security\login.html.twig' # optional
     registration: '@App\security\registration.html.twig' # optional
