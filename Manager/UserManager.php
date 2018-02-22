@@ -8,11 +8,13 @@
 
 namespace Lch\UserBundle\Manager;
 
+use Lch\UserBundle\DependencyInjection\Configuration;
 use Lch\UserBundle\Entity\User;
 use Lch\UserBundle\Util\PasswordUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class UserManager
@@ -26,9 +28,9 @@ class UserManager {
 	private $passwordUpdater;
 
 	/**
-	 * @var string $userClass the user class FQDN
+	 * @var array $classes the bundle classes
 	 */
-	private $userClass;
+	private $classes;
 
 	/**
 	 * @var UserPasswordEncoderInterface
@@ -42,13 +44,18 @@ class UserManager {
 	 * @param EntityManagerInterface $em
 	 * @param PasswordUpdater $passwordUpdater
 	 * @param UserPasswordEncoderInterface $passwordEncoder
-	 * @param $userClass string the app class user
+	 * @param $classes array bundle classes
 	 */
-	public function __construct( EntityManagerInterface $em, PasswordUpdater $passwordUpdater, UserPasswordEncoderInterface $passwordEncoder, $userClass ) {
+	public function __construct(
+		EntityManagerInterface $em,
+		PasswordUpdater $passwordUpdater,
+		UserPasswordEncoderInterface $passwordEncoder,
+		$classes
+	) {
 		$this->em              = $em;
 		$this->passwordUpdater = $passwordUpdater;
 		$this->passwordEncoder = $passwordEncoder;
-		$this->userClass       = $userClass;
+		$this->classes         = $classes;
 	}
 
 
@@ -56,7 +63,7 @@ class UserManager {
 	 * @return User
 	 */
 	public function create() {
-		return new $this->userClass();
+		return new $this->classes[Configuration::USER];
 	}
 
 	/**
@@ -67,7 +74,7 @@ class UserManager {
 	 * @return AdvancedUserInterface|null
 	 */
 	public function findUserByUsername( $username ) {
-		$user = $this->em->getRepository( $this->userClass )->findOneBy( [ 'username' => $username ] );
+		$user = $this->em->getRepository( $this->classes[Configuration::USER] )->findOneBy( [ 'username' => $username ] );
 
 		return $user;
 	}
@@ -95,7 +102,7 @@ class UserManager {
 	 * @return AdvancedUserInterface|null
 	 */
 	public function findUserByConfirmationToken( $confirmationToken ) {
-		$user = $this->em->getRepository( $this->userClass )->findOneBy( [ 'confirmationToken' => $confirmationToken ] );
+		$user = $this->em->getRepository( $this->classes[Configuration::USER] )->findOneBy( [ 'confirmationToken' => $confirmationToken ] );
 
 		return $user;
 	}
@@ -119,7 +126,7 @@ class UserManager {
 	 *
 	 * @return mixed
 	 */
-	public function encodePassword(User $user, $clearPassword) {
-		return $this->passwordEncoder->encodePassword($user, $clearPassword);
+	public function encodePassword( User $user, $clearPassword ) {
+		return $this->passwordEncoder->encodePassword( $user, $clearPassword );
 	}
 }

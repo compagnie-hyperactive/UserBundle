@@ -22,6 +22,12 @@ class LchUserExtension extends Extension
 		$configuration = new Configuration();
 		$config = $this->processConfiguration($configuration, $configs);
 
+
+		// Make class mapping array with parameters for further use (DI)
+		$container->setParameter(Configuration::ROOT_NODE . '.' . Configuration::CLASSES . '_array', $config[Configuration::CLASSES]);
+		$container->setParameter(Configuration::ROOT_NODE . '.' . Configuration::TEMPLATES . '_array', $config[Configuration::TEMPLATES]);
+		$container->setParameter(Configuration::ROOT_NODE . '.' . Configuration::FORMS . '_array', $config[Configuration::FORMS]);
+
 		// Make class mapping with parameters for further use (DI)
 		array_map(function($fqdnClass, $key) use ($container){
 			$container->setParameter(
