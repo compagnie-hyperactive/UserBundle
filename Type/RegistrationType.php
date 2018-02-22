@@ -6,7 +6,7 @@
  * Time: 11:41
  */
 
-namespace Lch\UserBundle\Form\Security;
+namespace Lch\UserBundle\Type;
 
 use Lch\UserBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;

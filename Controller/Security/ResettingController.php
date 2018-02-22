@@ -9,7 +9,7 @@
 namespace Lch\UserBundle\Controller\Security;
 
 use Lch\UserBundle\Entity\User;
-use Lch\UserBundle\Form\Type\Security\ResetPasswordType;
+use Lch\UserBundle\Type\ResetPasswordType;
 use Lch\UserBundle\Manager\UserManager;
 use Lch\UserBundle\Util\Mailer;
 use Lch\UserBundle\Util\TokenGenerator;

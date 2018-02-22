@@ -9,7 +9,7 @@
 namespace Lch\UserBundle\Controller\Security;
 
 use Lch\UserBundle\Entity\User;
-use Lch\UserBundle\Form\Security\RegistrationType;
+use Lch\UserBundle\Type\RegistrationType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
