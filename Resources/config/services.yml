@@ -1,7 +1,7 @@
 parameters:
   lch_user.password_updater.class: Lch\UserBundle\Util\PasswordUpdater
   lch_user.create_command.class: Lch\UserBundle\Command\CreateUserCommand
-  lch_user.registration_type.class: Lch\UserBundle\Form\Security\RegistrationType
+#  lch_user.registration_type.class: Lch\UserBundle\Type\RegistrationType
 
 services:
   lch_user.mailer:
@@ -26,6 +26,6 @@ services:
       - { name: console.command }
 
   lch_user.type.registration:
-    class: '%lch_user.registration_type.class%'
+    class: '%lch_user.forms.registration%'
     tags:
         - { name: form.type }

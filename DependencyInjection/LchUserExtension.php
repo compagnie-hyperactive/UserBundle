@@ -39,6 +39,13 @@ class LchUserExtension extends Extension
 			);
 		}, $config[Configuration::TEMPLATES], array_keys($config[Configuration::TEMPLATES]));
 
+		// Make types mapping with parameters for further use (DI)
+		array_map(function($formClass, $key) use ($container){
+			$container->setParameter(
+				Configuration::ROOT_NODE . '.' . Configuration::FORMS . '.' . $key,
+				$formClass
+			);
+		}, $config[Configuration::FORMS], array_keys($config[Configuration::FORMS]));
 
 
 

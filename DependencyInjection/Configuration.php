@@ -3,6 +3,7 @@
 namespace Lch\UserBundle\DependencyInjection;
 
 use Lch\UserBundle\Manager\UserManager;
+use Lch\UserBundle\Type\RegistrationType;
 use Lch\UserBundle\Util\Mailer;
 use Lch\UserBundle\Util\TokenGenerator;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -35,6 +36,11 @@ class Configuration implements ConfigurationInterface
 	const REGISTRATION = 'registration';
 	const CHECK_EMAIL = 'check_email';
 	const RESET_PASSWORD = 'reset_password';
+
+	/**
+	 * Forms
+	 */
+	const FORMS = 'forms';
 
 	/**
 	 * {@inheritdoc}
@@ -101,6 +107,21 @@ class Configuration implements ConfigurationInterface
 							->info('Defines the reset password template. Use @LchUser/reset-password.html.twig as inspiration')
 							->cannotBeEmpty()
 							->defaultValue('@LchUser/reset-password.html.twig')
+						->end()
+					->end()
+				->end()
+				->arrayNode(static::FORMS)
+					->canBeEnabled()
+					->children()
+//						->scalarNode(static::LOGIN)
+//							->info('Defines the login form. It have to use  as parent form')
+//							->cannotBeEmpty()
+//							->defaultValue('@LchUser/login.html.twig')
+//						->end()
+						->scalarNode(static::REGISTRATION)
+							->info('Defines the registration form. It must use Lch\UserBundle\Type\RegistrationType as parent form')
+							->cannotBeEmpty()
+							->defaultValue(RegistrationType::class)
 						->end()
 					->end()
 				->end()
