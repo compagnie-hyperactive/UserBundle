@@ -18,21 +18,10 @@ lch_user:
     user: App\Entity\User\User # Mandatory
     manager:  App\Manager\UserManager # optional
     mailer:  App\Util\Mailer # optional
-    token_generator:  App\Util\TokenGenerator # optional  
-  templates: # optional
-    login: '@App\security\login.html.twig' # optional
-    registration: '@App\security\registration.html.twig' # optional
-    reset_password: '@App\security\reset_password.html.twig' # optional
-    check_email: '@App\security\reset_password.html.twig' # optional
+    token_generator:  App\Util\TokenGenerator # optional    
 ```
 
-Then add routes
-
-```yaml
-lch_user:
-  resource: "@LchUserBundle/Resources/config/routing.yml"
-  prefix:   /
-```
+This bundle provides utilities. This mean all rendering (templates, presentation, but also routing...) are up to you and you project specifities. 
 
 ## Usage
 

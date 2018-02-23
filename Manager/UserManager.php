@@ -129,4 +129,17 @@ class UserManager {
 	public function encodePassword( User $user, $clearPassword ) {
 		return $this->passwordEncoder->encodePassword( $user, $clearPassword );
 	}
+
+	/**
+	 * @param User $user
+	 */
+	public function register(User $user) {
+		$password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
+		$user->setPassword($password);
+
+		$this->em->persist($user);
+		$this->em->flush();
+
+		// TODO add event after registration
+	}
 }
