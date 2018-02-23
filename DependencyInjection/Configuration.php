@@ -4,6 +4,7 @@ namespace Lch\UserBundle\DependencyInjection;
 
 use Lch\UserBundle\Manager\PasswordManager;
 use Lch\UserBundle\Manager\UserManager;
+use Lch\UserBundle\Type\LoginType;
 use Lch\UserBundle\Type\RegistrationType;
 use Lch\UserBundle\Util\Mailer;
 use Lch\UserBundle\Util\TokenGenerator;
@@ -120,11 +121,11 @@ class Configuration implements ConfigurationInterface
 				->arrayNode(static::FORMS)
 					->canBeEnabled()
 					->children()
-//						->scalarNode(static::LOGIN)
-//							->info('Defines the login form. It have to use  as parent form')
-//							->cannotBeEmpty()
-//							->defaultValue('@LchUser/login.html.twig')
-//						->end()
+						->scalarNode(static::LOGIN)
+							->info('Defines the login form. It have to use Lch\UserBundle\Type\LoginType as parent form')
+							->cannotBeEmpty()
+							->defaultValue(LoginType::class)
+						->end()
 						->scalarNode(static::REGISTRATION)
 							->info('Defines the registration form. It must use Lch\UserBundle\Type\RegistrationType as parent form')
 							->cannotBeEmpty()
