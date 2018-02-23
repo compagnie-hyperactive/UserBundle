@@ -2,6 +2,7 @@
 
 namespace Lch\UserBundle\DependencyInjection;
 
+use Lch\UserBundle\Manager\PasswordManager;
 use Lch\UserBundle\Manager\UserManager;
 use Lch\UserBundle\Type\RegistrationType;
 use Lch\UserBundle\Util\Mailer;
@@ -24,7 +25,8 @@ class Configuration implements ConfigurationInterface
 	 */
 	const CLASSES = 'classes';
 	const USER = 'user';
-	const MANAGER = 'manager';
+	const USER_MANAGER = 'user_manager';
+	const PASSWORD_MANAGER = 'password_manager';
 	const MAILER = 'mailer';
 	const TOKEN_GENERATOR = 'token_generator';
 
@@ -68,9 +70,14 @@ class Configuration implements ConfigurationInterface
 							->isRequired()
 							->cannotBeEmpty()
 						->end()
-						->scalarNode(static::MANAGER)
-							->info('Defines the user manager class to be used. Use Lch\UserBundle\Manager\User as an example')
+						->scalarNode(static::USER_MANAGER)
+							->info('Defines the user manager class to be used. Use Lch\UserBundle\Manager\UserManager as an example')
 							->defaultValue(UserManager::class)
+							->cannotBeEmpty()
+						->end()
+						->scalarNode(static::PASSWORD_MANAGER)
+							->info('Defines the password manager class to be used. Use Lch\UserBundle\Manager\PasswordManager as an example')
+							->defaultValue(PasswordManager::class)
 							->cannotBeEmpty()
 						->end()
 						->scalarNode(static::MAILER)

@@ -10,7 +10,6 @@ namespace Lch\UserBundle\Manager;
 
 use Lch\UserBundle\DependencyInjection\Configuration;
 use Lch\UserBundle\Entity\User;
-use Lch\UserBundle\Util\PasswordUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
@@ -24,8 +23,8 @@ class UserManager {
 	/** @var EntityManagerInterface */
 	private $em;
 
-	/** @var PasswordUpdater */
-	private $passwordUpdater;
+	/** @var PasswordManager */
+	private $passwordManager;
 
 	/**
 	 * @var array $classes the bundle classes
@@ -33,28 +32,19 @@ class UserManager {
 	private $classes;
 
 	/**
-	 * @var UserPasswordEncoderInterface
-	 */
-	private $passwordEncoder;
-
-
-	/**
 	 * UserManager constructor.
 	 *
 	 * @param EntityManagerInterface $em
-	 * @param PasswordUpdater $passwordUpdater
-	 * @param UserPasswordEncoderInterface $passwordEncoder
+	 * @param PasswordManager $passwordManager
 	 * @param $classes array bundle classes
 	 */
 	public function __construct(
 		EntityManagerInterface $em,
-		PasswordUpdater $passwordUpdater,
-		UserPasswordEncoderInterface $passwordEncoder,
+		PasswordManager $passwordManager,
 		$classes
 	) {
 		$this->em              = $em;
-		$this->passwordUpdater = $passwordUpdater;
-		$this->passwordEncoder = $passwordEncoder;
+		$this->passwordManager = $passwordManager;
 		$this->classes         = $classes;
 	}
 
@@ -120,21 +110,12 @@ class UserManager {
 		$user->setPasswordRequestedAt( null );
 	}
 
-	/**
-	 * @param User $user
-	 * @param $clearPassword
-	 *
-	 * @return mixed
-	 */
-	public function encodePassword( User $user, $clearPassword ) {
-		return $this->passwordEncoder->encodePassword( $user, $clearPassword );
-	}
-
+	
 	/**
 	 * @param User $user
 	 */
 	public function register(User $user) {
-		$password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
+		$password = $this->passwordManager->encodePassword($user, $user->getPlainPassword());
 		$user->setPassword($password);
 
 		$this->em->persist($user);

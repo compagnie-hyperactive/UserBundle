@@ -6,13 +6,14 @@
  * Time: 10:38
  */
 
-namespace Lch\UserBundle\Util;
+namespace Lch\UserBundle\Manager;
 
 use Lch\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class PasswordUpdater {
+class PasswordManager {
 	/** @var EncoderFactoryInterface */
 	private $encoderFactory;
 
@@ -21,8 +22,9 @@ class PasswordUpdater {
 	 *
 	 * @param EncoderFactoryInterface $encoderFactory
 	 */
-	public function __construct( EncoderFactoryInterface $encoderFactory ) {
+	public function __construct( EncoderFactoryInterface $encoderFactory, UserPasswordEncoderInterface $passwordEncoder ) {
 		$this->encoderFactory = $encoderFactory;
+		$this->passwordEncoder = $passwordEncoder;
 	}
 
 	/**
@@ -43,5 +45,16 @@ class PasswordUpdater {
 
 		$hashedPassword = $encoder->encodePassword( $plainPassword, $user->getSalt() );
 		$user->setPassword( $hashedPassword );
+	}
+
+	/**
+	 * Hash a user password
+	 *
+	 * @param User $user
+	 *
+	 * @throws \Exception
+	 */
+	public function encodePassword( User $user, $clearPassword ) {
+		return $this->passwordEncoder->encodePassword( $user, $clearPassword );
 	}
 }
