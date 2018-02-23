@@ -1,7 +1,5 @@
 parameters:
-  lch_user.password_updater.class: Lch\UserBundle\Util\PasswordUpdater
   lch_user.create_command.class: Lch\UserBundle\Command\CreateUserCommand
-#  lch_user.registration_type.class: Lch\UserBundle\Type\RegistrationType
 
 services:
   lch_user.mailer:
@@ -11,17 +9,17 @@ services:
   lch_user.token_generator:
     class: '%lch_user.classes.token_generator%'
 
-  lch_user.password_updater:
-    class: '%lch_user.password_updater.class%'
-    arguments: ['@security.encoder_factory']
+  lch_user.password_manager:
+    class: '%lch_user.classes.password_manager%'
+    arguments: ['@security.encoder_factory', '@security.user_password_encoder.generic']
 
-  lch_user.manager:
-    class: '%lch_user.classes.manager%'
-    arguments: ['@doctrine.orm.entity_manager', '@lch_user.password_updater', '@security.user_password_encoder.generic', '%lch_user.classes_array%']
+  lch_user.user_manager:
+    class: '%lch_user.classes.user_manager%'
+    arguments: ['@doctrine.orm.entity_manager', '@lch_user.password_manager', '%lch_user.classes_array%']
 
   lch_user.command.create:
     class: '%lch_user.create_command.class%'
-    arguments: ['@lch_user.manager']
+    arguments: ['@lch_user.user_manager']
     tags:
       - { name: console.command }
 
