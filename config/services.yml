@@ -31,7 +31,7 @@ services:
 
     Lch\UserBundle\Util\Mailer:
         arguments:
-            $mailTemplate: '%lch_user.templates.reset_mail%'
+            $mailTemplate: '%lch_user.templates.reset_email%'
 
 #parameters:
 #  lch_user.create_command.class: Lch\UserBundle\Command\CreateUserCommand
