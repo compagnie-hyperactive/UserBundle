@@ -14,31 +14,40 @@ use Symfony\Component\Routing\RouterInterface;
 
 class Mailer {
 
-	private $router;
-
 	/** @var \Twig_Environment */
 	private $twig;
 
 	/** @var \Swift_Mailer */
 	private $swift;
 
-	public function __construct( RouterInterface $router, \Twig_Environment $twig, \Swift_Mailer $mailer ) {
-		$this->router = $router;
+	/**
+	 * @var string
+	 */
+	private $mailTemplate;
+
+	public function __construct( \Twig_Environment $twig, \Swift_Mailer $mailer, $mailTemplate ) {
 		$this->twig   = $twig;
 		$this->swift  = $mailer;
+		$this->mailTemplate = $mailTemplate;
 	}
 
-	public function sendResetPasswordEmail( User $user ) {
-		$url = $this->router->generate( 'lch_reset_email', [ 'token' => $user->getConfirmationToken() ], UrlGeneratorInterface::ABSOLUTE_URL );
-
+	/**
+	 * @param \Lch\UserBundle\Entity\User $user
+	 * @param $resetRoute
+	 *
+	 * @throws \Twig_Error_Loader
+	 * @throws \Twig_Error_Runtime
+	 * @throws \Twig_Error_Syntax
+	 */
+	public function sendResetPasswordEmail( User $user, $resetRoute ) {
 		$message = ( new \Swift_Message( 'Réinitialisation de votre mot de passe' ) )
 			->setFrom( 'mama003@gmail.com' )
 			->setTo( $user->getEmail() )
 			->setBody(
 				$this->twig->render(
-					'Security/emails/reset-password.html.twig', [
+					$this->mailTemplate, [
 						'user' => $user,
-						'url'  => $url,
+						'url'  => $resetRoute,
 					]
 				),
 				'text/html'
