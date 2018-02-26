@@ -1,0 +1,58 @@
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'fr'
+    image_directory: '/media/image'
+    lch_user.create_command.class: Lch\UserBundle\Command\CreateUserCommand
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
+        bind:
+            $projectDir: '%kernel.project_dir%'
+            $image_directory: '%image_directory%'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+
+#parameters:
+#  lch_user.create_command.class: Lch\UserBundle\Command\CreateUserCommand
+
+#services:
+#  lch_user.mailer:
+#    class: '%lch_user.classes.mailer%'
+#    arguments: ['@router', '@twig', '@swiftmailer.mailer.default']
+#
+#  lch_user.token_generator:
+#    class: '%lch_user.classes.token_generator%'
+#
+#  lch_user.password_manager:
+#    class: '%lch_user.classes.password_manager%'
+#    arguments: ['@security.encoder_factory', '@security.user_password_encoder.generic']
+#
+#  lch_user.user_manager:
+#    class: '%lch_user.classes.user_manager%'
+#    arguments: ['@doctrine.orm.entity_manager', '@lch_user.password_manager', '%lch_user.classes_array%']
+#
+#  lch_user.command.create:
+#    class: '%lch_user.create_command.class%'
+#    arguments: ['@lch_user.user_manager']
+#    tags:
+#      - { name: console.command }
+#
+#  lch_user.type.registration:
+#    class: '%lch_user.forms.registration%'
+#    tags:
+#        - { name: form.type }
