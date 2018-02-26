@@ -64,7 +64,7 @@ class LchUserExtension extends Extension
 		//TODO Check provided classes matching Interface instances
 
 
-		$loader = new Loader\YamlFileLoader($container, new FileLocator( __DIR__ . '/../Resources/config' ));
+		$loader = new Loader\YamlFileLoader($container, new FileLocator( __DIR__ . '/../config' ));
 		$loader->load('services.yml');
 	}
 }
