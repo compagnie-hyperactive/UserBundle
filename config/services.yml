@@ -33,6 +33,10 @@ services:
         arguments:
             $mailTemplate: '%lch_user.templates.reset_email%'
 
+    Lch\UserBundle\Type\ResetPasswordType:
+        arguments:
+            $userClass: '%lch_user.classes.user%'
+
 #parameters:
 #  lch_user.create_command.class: Lch\UserBundle\Command\CreateUserCommand
 
