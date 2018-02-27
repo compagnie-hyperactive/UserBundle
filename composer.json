@@ -26,7 +26,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Lch\\UserBundle\\": ""
+      "Lch\\UserBundle\\": "src",
+      "Lch\\UserBundle\\Bundle": ""
     },
     "exclude-from-classmap": [
       "/Tests/"
