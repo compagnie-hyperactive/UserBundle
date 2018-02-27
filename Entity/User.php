@@ -40,10 +40,9 @@ abstract class User implements AdvancedUserInterface, \Serializable {
 	protected $email;
 
 	/**
-	 * @Assert\NotBlank()
 	 * @Assert\Length(max=4096)
 	 */
-	private $plainPassword;
+	protected $plainPassword;
 
 	/**
 	 * @ORM\Column(type="string", length=64)
