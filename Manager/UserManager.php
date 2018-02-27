@@ -105,7 +105,7 @@ class UserManager {
 	 * @throws \Exception
 	 */
 	public function updateUserPassword( User $user ) {
-		$this->passwordUpdater->hashPassword( $user );
+		$this->passwordManager->hashPassword( $user );
 		$user->setConfirmationToken( null );
 		$user->setPasswordRequestedAt( null );
 	}
