@@ -6,6 +6,7 @@ use Lch\UserBundle\Manager\PasswordManager;
 use Lch\UserBundle\Manager\UserManager;
 use Lch\UserBundle\Type\LoginType;
 use Lch\UserBundle\Type\RegistrationType;
+use Lch\UserBundle\Type\ResetPasswordType;
 use Lch\UserBundle\Util\Mailer;
 use Lch\UserBundle\Util\TokenGenerator;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
