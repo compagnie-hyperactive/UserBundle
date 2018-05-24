@@ -18,7 +18,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(fields="email", message="Email already taken")
  * @UniqueEntity(fields="username", message="Username already taken")
  */
-abstract class User implements AdvancedUserInterface, \Serializable {
+abstract class User implements AdvancedUserInterface, \Serializable
+{
+    const ROLE_DEFAULT = 'ROLE_USER';
+
 	/**
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id
@@ -69,6 +72,29 @@ abstract class User implements AdvancedUserInterface, \Serializable {
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	protected $passwordRequestedAt;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(type="array", nullable=true)
+     */
+    protected $roles;
+
+    /**
+     * @param $role
+     * @return $this
+     */
+    public function addRole($role)
+    {
+        $role = strtoupper($role);
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+        return $this;
+    }
 
 	/**
 	 * User constructor.
@@ -173,10 +199,6 @@ abstract class User implements AdvancedUserInterface, \Serializable {
 		return $this;
 	}
 
-	public function getRoles() {
-		return [ 'ROLE_USER' ];
-	}
-
 	public function eraseCredentials() {
 	}
 
@@ -271,4 +293,35 @@ abstract class User implements AdvancedUserInterface, \Serializable {
 			$this->isActive,
 			) = unserialize( $serialized );
 	}
+
+
+    /**
+     * @return array
+     */
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param $role
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        return in_array(strtoupper($role), $this->getRoles(), true);
+    }
+
+    /**
+     * @param array $roles
+     * @return $this
+     */
+    public function setRoles(array $roles)
+    {
+        $this->roles = array();
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+        return $this;
+    }
 }

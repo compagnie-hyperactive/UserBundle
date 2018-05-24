@@ -61,6 +61,10 @@ class CreateUserCommand extends Command {
 		$question = new Question( 'Please enter the email address: ' );
 		$email    = $helper->ask( $input, $output, $question );
 
+        // Role
+        $question = new Question( 'Please enter the role: ' );
+        $role    = $helper->ask( $input, $output, $question );
+
 		// Password
 		$question = new Question( 'Please enter the password: ' );
 		$question->setHidden( true );
@@ -72,6 +76,7 @@ class CreateUserCommand extends Command {
 		$user->setEmail( $email );
 		$user->setUsername( $username );
 		$user->setPassword( $password );
+		$user->setRoles( [$role] );
 
 		$this->userManager->updateUserPassword( $user );
 		$this->userManager->updateUser( $user, true );
