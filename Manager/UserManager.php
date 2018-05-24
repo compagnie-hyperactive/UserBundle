@@ -69,6 +69,12 @@ class UserManager {
 		return $user;
 	}
 
+    public function findUserByEmail( $email ) {
+        $user = $this->em->getRepository( $this->classes[Configuration::USER] )->findOneBy( [ 'email' => $email ] );
+
+        return $user;
+    }
+
 	/**
 	 * Update a user
 	 *
