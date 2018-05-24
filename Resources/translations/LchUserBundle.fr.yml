@@ -1,0 +1,4 @@
+lch.user_bundle.login_form.username_or_email.label: Nom d'utilisateur
+lch.user_bundle.login_form.password.label: Mot de passe
+lch.user_bundle.login_form.remember_me.label: Se rappeller de moi ?
+lch.user_bundle.login_form.connexion.label: Connexion

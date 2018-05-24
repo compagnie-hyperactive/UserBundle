@@ -18,24 +18,29 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LoginType extends AbstractType {
-	public function buildForm( FormBuilderInterface $builder, array $options ) {
-		$builder
-			->add( 'username_or_email', TextType::class, [
-				'data' => $options['last_username']
-			] )
-			->add( 'password', PasswordType::class )
-			->add( 'remember_me', CheckboxType::class, [
-				'required' => false
-			] )
-			->add('submit', SubmitType::class, [
-				'label' => 'Connexion'
-			])
-		;
-	}
+    public function buildForm( FormBuilderInterface $builder, array $options ) {
+        $builder
+            ->add( 'username_or_email', TextType::class, [
+                'data' => $options['last_username'],
+                'label' => 'lch.user_bundle.login_form.username_or_email.label'
+            ] )
+            ->add( 'password', PasswordType::class, [
+                'label' => 'lch.user_bundle.login_form.password.label'
+            ] )
+            ->add( 'remember_me', CheckboxType::class, [
+                'required' => false,
+                'label' => 'lch.user_bundle.login_form.remember_me.label'
+            ] )
+            ->add('submit', SubmitType::class, [
+                'label' => 'lch.user_bundle.login_form.connexion.label'
+            ])
+        ;
+    }
 
-	public function configureOptions( OptionsResolver $resolver ) {
-		$resolver->setDefaults( [
-			'last_username' => ''
-		] );
-	}
+    public function configureOptions( OptionsResolver $resolver ) {
+        $resolver->setDefaults( [
+            'last_username' => '',
+            'translation_domain' => 'LchUserBundle',
+        ] );
+    }
 }
